@@ -25,6 +25,24 @@ print(np.corrcoef(W_2_dis.reshape(136*136), Dt.reshape(136*136)))
 print(np.corrcoef(W_2_reg.reshape(136*136), D.reshape(136*136)))
 print(np.corrcoef(W_2_reg.reshape(136*136), Dt.reshape(136*136)))
 
+vol = pd.read_excel('Node_Features_Weekly.xlsx', sheet_name = 'Lane Volume')
+vol = vol.reset_index()
+vol = vol.rename(columns = {"level_0": "Destination ID", "level_1": "Origin ID",\
+                            "Destination Cluster ID": "Volume"})
+table2 = pd.pivot_table(vol, values = "Volume", index = ["Origin ID"], \
+                       columns = ["Destination ID"], fill_value = 0)
+V = table2.to_numpy()
+Vt = V.transpose()
+
+print(np.corrcoef(W_1.reshape(136*136), V.reshape(136*136)))
+print(np.corrcoef(W_1.reshape(136*136), Vt.reshape(136*136)))
+
+print(np.corrcoef(W_2_dis.reshape(136*136), V.reshape(136*136)))
+print(np.corrcoef(W_2_dis.reshape(136*136), Vt.reshape(136*136)))
+
+print(np.corrcoef(W_2_reg.reshape(136*136), V.reshape(136*136)))
+print(np.corrcoef(W_2_reg.reshape(136*136), Vt.reshape(136*136)))
+
 lat_long = pd.read_excel('Node_Features_Weekly.xlsx', sheet_name = 'Node Lat Long')
 clusters = lat_long['Cluster ID'].unique()
 Geo_D = np.zeros((136,136))
